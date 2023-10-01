@@ -13,9 +13,6 @@ def renderImagePose(dataset_folder_path, mesh_file_path=None):
                           scene_info.point_cloud.colors,
                           name='pointcloud')
 
-    if mesh_file_path is not None:
-        wis3d.add_mesh(mesh_file_path, name='mesh')
-
     for i, train_camera in enumerate(scene_info.train_cameras):
         image_matrix = np.zeros((4, 4), dtype=float)
         image_matrix[:3, :3] = train_camera.R.transpose()
@@ -23,4 +20,7 @@ def renderImagePose(dataset_folder_path, mesh_file_path=None):
         image_matrix[3, 3] = 1.0
 
         wis3d.add_camera_pose(image_matrix, name="camera_pose_" + str(i))
+
+    if mesh_file_path is not None:
+        wis3d.add_mesh(mesh_file_path, name='mesh')
     return True
