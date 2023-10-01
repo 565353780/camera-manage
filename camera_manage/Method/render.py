@@ -3,7 +3,7 @@ from wis3d import Wis3D
 
 from camera_manage.Method.colmap.scene import readColmapSceneInfo
 
-def renderImagePose(dataset_folder_path):
+def renderImagePose(dataset_folder_path, mesh_file_path=None):
     scene_info = readColmapSceneInfo(dataset_folder_path, 'images', False)
 
     dataset_name = dataset_folder_path.split('/')[-3]
@@ -12,6 +12,9 @@ def renderImagePose(dataset_folder_path):
     wis3d.add_point_cloud(scene_info.point_cloud.points,
                           scene_info.point_cloud.colors,
                           name='pointcloud')
+
+    if mesh_file_path is not None:
+        wis3d.add_mesh(mesh_file_path, name='mesh')
 
     for i, train_camera in enumerate(scene_info.train_cameras):
         image_matrix = np.zeros((4, 4), dtype=float)
