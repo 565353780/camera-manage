@@ -6,7 +6,9 @@ from camera_manage.Method.colmap.scene import readColmapSceneInfo
 def renderImagePose(dataset_folder_path):
     scene_info = readColmapSceneInfo(dataset_folder_path, 'images', False)
 
-    wis3d = Wis3D("./output/test1/", 'test1', xyz_pattern=('x', 'y', 'z'))
+    dataset_name = dataset_folder_path.split('/')[-3]
+
+    wis3d = Wis3D('./output/' + dataset_name + '/', dataset_name, xyz_pattern=('x', 'y', 'z'))
     wis3d.add_point_cloud(scene_info.point_cloud.points,
                           scene_info.point_cloud.colors,
                           name='pointcloud')
