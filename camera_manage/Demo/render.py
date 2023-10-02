@@ -5,6 +5,7 @@ def demo():
 
     dataset_folder_path = '../habitat-sim-manage/output/scene0474_02_vh_clean/'
     mesh_file_path = '/home/chli/chLi/Dataset/ScanNet/scans/scene0474_02/scene0474_02_vh_clean.ply'
+    mesh_file_path = None
 
     renderImagePose(dataset_folder_path, mesh_file_path)
     return True
