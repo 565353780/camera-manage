@@ -1,16 +1,17 @@
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
-from camera_manage.Method.transform import getAxisTransformMatrix
+from camera_manage.Data.tag import Tag
+
 
 class Axis(object):
-    def __init__(self, axis_tag='+x+y+z', pos=[0, 0, 0], quat=[0, 0, 0, 1]) -> None:
+    def __init__(self, tag_info='+x+y+z', pos=[0, 0, 0], quat=[0, 0, 0, 1]):
         '''
-        axis_tag: target axis order on world axis when pos and quat is set to I
+        tag_info: target axis order on world axis when pos and quat is set to I
         pos: axis center pos in world, xyz-order
         quat: axis face-forward direction in world, xyzw-order
         '''
-        self.axis_tag=axis_tag
+        self.tag = Tag(tag_info)
         self.pos = np.array(pos, dtype=float)
         self.quat = np.array(quat, dtype=float)
 
@@ -19,11 +20,15 @@ class Axis(object):
         self.updateTransformMatrix()
         return
 
-    def updateTransformMatrix(self):
-        self.transform_matrix = np.diag([1, 1, 1]).astype(float)
+    def getTagMatrix(self):
+        return self.tag.getMatrix()
 
-        axis_transform_matrix = getAxisTransformMatrix(self.axis_tag)
-        self.transform_matrix = axis_transform_matrix.dot(self.transform_matrix)
+    def updateTransformMatrix(self):
+        self.transform_matrix = np.identity(3, dtype=float)
+
+        axis_transform_matrix = self.getTagMatrix()
+        self.transform_matrix = axis_transform_matrix.dot(
+            self.transform_matrix)
 
         rotate_matrix = R.from_quat([
             self.quat[1], self.quat[2], self.quat[3], self.quat[0]
