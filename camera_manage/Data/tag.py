@@ -1,9 +1,9 @@
 import numpy as np
-from camera_manage.Config.tag import SIGN_MAP, IDX_MAP
+from camera_manage.Config.tag import SIGN_MAP, IDX_MAP, IDX_INV_MAP
 
 
 class Tag(object):
-    def __init__(self, info='+x+y+z'):
+    def __init__(self, info: str = '+x+y+z'):
         '''
         info: descript the axis direction of world axis
         '''
@@ -24,7 +24,7 @@ class Tag(object):
 
     def updateParams(self):
         self.sign_list = [
-            SIGN_MAP[self.info[2 * i]] for i in range(3)
+            SIGN_MAP[self.info[2*i]] for i in range(3)
         ]
         self.idx_list = [
             IDX_MAP[self.info[2*i+1]] for i in range(3)
@@ -32,10 +32,31 @@ class Tag(object):
 
         return True
 
-    def setInfo(self, info):
-        self.info
+    def setInfo(self, info: str):
+        self.info = info
         self.updateParams()
         return True
+
+    def dot(self, last_tag):
+        new_sign_list = [
+            self.sign_list[i] * last_tag.sign_list[self.idx_list[i]]
+            for i in range(3)
+        ]
+        new_idx_list = [
+            last_tag.idx_list[self.idx_list[i]] for i in range(3)
+        ]
+
+        new_info = ''
+        for i in range(3):
+            sign = new_sign_list[i]
+            if abs(sign - 1.0) < abs(sign + 1.0):
+                new_info += '+'
+            else:
+                new_info += '-'
+
+            new_info += IDX_INV_MAP[str(new_idx_list[i])]
+
+        return Tag(new_info)
 
     def getMatrix(self):
         matrix = np.zeros((3, 3), dtype=float)
