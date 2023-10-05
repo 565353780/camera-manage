@@ -14,10 +14,18 @@ quat = [0, 0, 0, 1]
 
 axis_2 = Axis(tag_info, pos, quat)
 
-print('start dot tag')
 tag = axis_1.tag.dot(axis_2.tag)
-print('finish dot tag')
+print('tag 1 dot tag 2 =')
 print(tag.info)
+
+print('tag 1:')
+print(axis_1.tag.info)
+print('tag 1 inv:')
+print(axis_1.tag.inv().info)
+print('tag 2:')
+print(axis_2.tag.info)
+print('tag 2 inv:')
+print(axis_2.tag.inv().info)
 
 exit()
 

@@ -37,6 +37,20 @@ class Tag(object):
         self.updateParams()
         return True
 
+    def inv(self):
+        inv_info_list = ['+', 'x', '+', 'y', '+', 'z']
+        for i in range(3):
+            if abs(self.sign_list[i] - 1.0) < abs(self.sign_list[i] + 1.0):
+                inv_info_list[2 * self.idx_list[i]] = '+'
+            else:
+                inv_info_list[2 * self.idx_list[i]] = '-'
+            inv_info_list[2 * self.idx_list[i] + 1] = IDX_INV_MAP[str(i)]
+
+        inv_info = ''
+        for i in range(6):
+            inv_info += inv_info_list[i]
+        return Tag(inv_info)
+
     def dot(self, last_tag):
         new_sign_list = [
             self.sign_list[i] * last_tag.sign_list[self.idx_list[i]]
